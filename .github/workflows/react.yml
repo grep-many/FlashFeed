@@ -34,8 +34,7 @@ jobs:
       - name: Copy .env file
         run: |
           cd client  # Navigate to the client folder
-          echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> .env
-          echo "REACT_APP_OTHER_VAR=${{ secrets.REACT_APP_OTHER_VAR }}" >> .env
+          echo "REACT_APP_IP=${{ secrets.REACT_APP_IP }}" >> .env
           # Add more environment variables as needed
 
       - name: Build the React app
