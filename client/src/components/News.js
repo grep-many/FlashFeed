@@ -53,7 +53,6 @@ const News = (props) => {
     
             props.setProgress(100);
         } catch (error) {
-            console.error("Failed to fetch news data from the backend:", error);
             setHasError(true); // Set error state if there's a failure
             props.setProgress(100); // Set progress to 100 on error to indicate the process is finished
         }
