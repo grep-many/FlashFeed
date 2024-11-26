@@ -21,7 +21,7 @@ const News = (props) => {
         setHasError(false); // Reset error state before a new fetch
         
         // Backend URL to fetch news
-        const url = `http://${process.env.REACT_APP_IP}/news?country=${countryFlags[props.country]}&category=${props.category}&page=${page}&pageSize=${props.pageSize}`;
+        const url = `${process.env.REACT_APP_IP}/news?country=${countryFlags[props.country]}&category=${props.category}&page=${page}&pageSize=${props.pageSize}`;
         
         try {
             const response = await fetch(url);
