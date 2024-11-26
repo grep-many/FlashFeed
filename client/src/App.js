@@ -13,7 +13,7 @@ const App = () => {
 
   return (
     <>
-      <Router>
+      <Router basename="/FlashFeed">
         <LoadingBar
           color='#fff'
           progress={progress}
