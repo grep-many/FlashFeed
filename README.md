@@ -46,6 +46,7 @@ To get started, clone this repository and install the dependencies for both the 
 2. Create a `.env` file in the `server` directory and add the following line:
     ```bash
     NEWS_API_KEY=<Your own newsapi key>
+    PORT=<Port of your choice>
     ```
 
 3. Install the server dependencies:
