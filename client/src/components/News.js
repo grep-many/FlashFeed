@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import NewsItem from './NewsItem';
 import PropTypes from 'prop-types';
-import InfiniteScroll from 'react-infinite-scroll-component';
+import InfiniteScroll from 'react-infinite-scroll-component'; // Since you mentioned it's a library
 import { countryFlags } from './countryFlags'; 
 
 const News = (props) => {
     const [articles, setArticles] = useState([]);
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
+    const [hasError, setHasError] = useState(false); // Track error state
 
     // Ensure that the document title is updated only once
     useEffect(() => {
@@ -17,6 +18,7 @@ const News = (props) => {
 
     const fetchData = async () => {
         props.setProgress(25);
+        setHasError(false); // Reset error state before a new fetch
         
         // Backend URL to fetch news
         const url = `http://${process.env.REACT_APP_IP}/news?country=${countryFlags[props.country]}&category=${props.category}&page=${page}&pageSize=${props.pageSize}`;
@@ -52,7 +54,8 @@ const News = (props) => {
             props.setProgress(100);
         } catch (error) {
             console.error("Failed to fetch news data from the backend:", error);
-            props.setProgress(0); // Reset progress bar in case of failure
+            setHasError(true); // Set error state if there's a failure
+            props.setProgress(100); // Set progress to 100 on error to indicate the process is finished
         }
     };
     
@@ -73,40 +76,46 @@ const News = (props) => {
             <h1 className="text-center text-light my-5">
                 <strong>FlashFeed</strong> - Top Headlines | {props.category.charAt(0).toUpperCase() + props.category.slice(1)}
             </h1>
-            <InfiniteScroll
-                dataLength={articles.length}
-                next={fetchMoreData}
-                hasMore={hasMore}
-                loader={<h4 className="text-center text-light">Loading...</h4>}
-                endMessage={
-                    <p className="text-center text-light my-5">
-                        <strong>You are all caught up for today!</strong>
-                    </p>
-                }
-            >
-                <div className="container row d-flex justify-content-center">
-                    {articles.map((article) => (
-                        <NewsItem
-                            key={article.url}
-                            title={article.title}
-                            description={article.description}
-                            imageUrl={article.urlToImage}
-                            url={article.url}
-                            published={article.publishedAt}
-                            author={article.author}
-                            source={article.source.name}
-                        />
-                    ))}
-                </div>
-            </InfiniteScroll>
+
+            {/* If there's an error, show the error message */}
+            {hasError && (
+                <h4 className="text-center text-danger">
+                    Server is down. Please try again later.
+                </h4>
+            )}
+
+            {/* Render InfiniteScroll only when there's no error */}
+            {!hasError && (
+                <InfiniteScroll
+                    dataLength={articles.length}
+                    next={fetchMoreData}
+                    hasMore={hasMore}
+                    loader={<h4 className="text-center text-light">Loading...</h4>}
+                    endMessage={
+                        <p className="text-center text-light my-5">
+                            <strong>You are all caught up for today!</strong>
+                        </p>
+                    }
+                >
+                    <div className="container row d-flex justify-content-center">
+                        {articles.map((article) => (
+                            <NewsItem
+                                key={article.url}
+                                title={article.title}
+                                description={article.description}
+                                imageUrl={article.urlToImage}
+                                url={article.url}
+                                published={article.publishedAt}
+                                author={article.author}
+                                source={article.source.name}
+                            />
+                        ))}
+                    </div>
+                </InfiniteScroll>
+            )}
         </div>
     );
 };
-
-// News.defaultProps = {
-//     country: 'us',
-//     pageSize: 15,
-// };
 
 News.propTypes = {
     country: PropTypes.string,
