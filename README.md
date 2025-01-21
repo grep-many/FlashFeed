@@ -1,5 +1,5 @@
 # FlashFeed | Get your daily dose of news for free!
-
+!!!warning this api only shows news related to united states api docs shows that it shows for every country but not showing!!!
 FlashFeed is a simple, easy-to-use news application built with a client-server architecture. It fetches real-time news from the [NewsAPI](https://newsapi.org/), allowing users to explore news from various categories such as Business, Entertainment, Health, Science, Sports, and Technology.
 
 ## Prerequisites
